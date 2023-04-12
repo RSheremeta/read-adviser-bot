@@ -4,6 +4,13 @@
 
 token := $(shell echo $(TG_TOKEN))
 
-.PHONY start:
-	go build && ./read-adviser-bot -tg-bot-token '${token}'
+start:
+	go build && ./read-adviser-bot -tg_bot_token '${token}'
 
+start_sqlite:
+	go build && ./read-adviser-bot -tg_bot_token '${token}' -storage_type 'sqlite'
+
+start_files:
+	go build && ./read-adviser-bot -tg_bot_token '${token}' -storage_type 'files'
+
+.PHONY: start start_sqlite start_files
