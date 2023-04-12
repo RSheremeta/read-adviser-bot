@@ -21,9 +21,7 @@ const (
 func (p *Processor) doCmd(chatID int, text, username string) error {
 	text = strings.TrimSpace(text)
 
-	log.Printf("got new command %q from %q", text, username)
-
-	// add page link
+	log.Printf("got a new command %q from %q", text, username)
 
 	if isAddCmd(text) {
 		return p.savePage(chatID, text, username)
@@ -39,14 +37,10 @@ func (p *Processor) doCmd(chatID int, text, username string) error {
 	default:
 		return p.tg.SendMsg(chatID, msgUnknownCommand)
 	}
-
-	// get random page: /rnd
-	// /help
-	// /start: hi + help
 }
 
 func (p *Processor) savePage(chatID int, pageURL, username string) (err error) {
-	defer func() { err = e.WrapIfErr("cannot do command 'save page'", err) }()
+	defer func() { err = e.WrapIfErr("cannot do a 'save page' command", err) }()
 
 	// sendMsg := msgSender(chatID, p.tg)
 
@@ -76,7 +70,7 @@ func (p *Processor) savePage(chatID int, pageURL, username string) (err error) {
 }
 
 func (p *Processor) sendRandom(chatID int, username string) (err error) {
-	defer func() { err = e.WrapIfErr("cannot do command 'send random'", err) }()
+	defer func() { err = e.WrapIfErr("cannot do a 'send random' command", err) }()
 
 	page, err := p.storage.PickRandom(context.TODO(), username)
 	if err != nil && errors.Is(err, storage.ErrNoUserSavingsHistory) {

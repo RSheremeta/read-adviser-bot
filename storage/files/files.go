@@ -25,7 +25,7 @@ func New(basepath string) Storage {
 }
 
 func (s Storage) Save(_ context.Context, page *storage.Page) (err error) {
-	defer func() { err = e.WrapIfErr("cannot save", err) }()
+	defer func() { err = e.WrapIfErr("cannot save a file", err) }()
 
 	fPath := filepath.Join(s.basePath, page.Username)
 
@@ -54,7 +54,7 @@ func (s Storage) Save(_ context.Context, page *storage.Page) (err error) {
 }
 
 func (s Storage) PickRandom(_ context.Context, username string) (page *storage.Page, err error) {
-	defer func() { err = e.WrapIfErr("cannot pick random page", err) }()
+	defer func() { err = e.WrapIfErr("cannot pick a random page", err) }()
 
 	path := filepath.Join(s.basePath, username)
 
@@ -84,13 +84,13 @@ func (s Storage) PickRandom(_ context.Context, username string) (page *storage.P
 func (s Storage) Remove(_ context.Context, p *storage.Page) error {
 	fName, err := filename(p)
 	if err != nil {
-		return e.Wrap("cannot remove file", err)
+		return e.Wrap("cannot get a filename hash for further removing", err)
 	}
 
 	path := filepath.Join(s.basePath, p.Username, fName)
 
 	if err := os.Remove(path); err != nil {
-		msg := fmt.Sprintf("cannot remove file %s", path)
+		msg := fmt.Sprintf("cannot remove the file %s", path)
 		return e.Wrap(msg, err)
 	}
 
@@ -100,7 +100,7 @@ func (s Storage) Remove(_ context.Context, p *storage.Page) error {
 func (s Storage) IsExist(_ context.Context, p *storage.Page) (bool, error) {
 	fName, err := filename(p)
 	if err != nil {
-		return false, e.Wrap("cannot check whether file exists", err)
+		return false, e.Wrap("cannot get a filename hash for further existence checking", err)
 	}
 
 	path := filepath.Join(s.basePath, p.Username, fName)
@@ -109,7 +109,7 @@ func (s Storage) IsExist(_ context.Context, p *storage.Page) (bool, error) {
 	case errors.Is(err, os.ErrNotExist):
 		return false, nil
 	case err != nil:
-		msg := fmt.Sprintf("cannot check whether file %s exists", path)
+		msg := fmt.Sprintf("cannot check whether the file %s exists", path)
 		return false, e.Wrap(msg, err)
 	}
 
@@ -119,14 +119,14 @@ func (s Storage) IsExist(_ context.Context, p *storage.Page) (bool, error) {
 func (s Storage) decodePage(filepath string) (*storage.Page, error) {
 	f, err := os.Open(filepath)
 	if err != nil {
-		return nil, e.Wrap("cannot decode page", err)
+		return nil, e.Wrap("cannot open a file for further page decoding", err)
 	}
 	defer func() { _ = f.Close() }()
 
 	var p storage.Page
 
 	if err := gob.NewDecoder(f).Decode(&p); err != nil {
-		return nil, e.Wrap("cannot decode page", err)
+		return nil, e.Wrap("cannot decode the page", err)
 	}
 
 	return &p, nil

@@ -37,7 +37,7 @@ func (c *Client) SendMsg(chatID int, text string) error {
 
 	_, err := c.doRequest(sendMessageMethod, q)
 	if err != nil {
-		return e.Wrap("cannot send message", err)
+		return e.Wrap("cannot send a message", err)
 	}
 
 	return nil
@@ -65,7 +65,7 @@ func (c *Client) Updates(offset, limit int) (updates []Update, err error) {
 }
 
 func (c *Client) doRequest(method string, query url.Values) (data []byte, err error) {
-	defer func() { err = e.WrapIfErr("cannot do the request", err) }()
+	defer func() { err = e.WrapIfErr("cannot do a request", err) }()
 
 	u := url.URL{
 		Scheme: "https",
