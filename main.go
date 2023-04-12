@@ -5,7 +5,7 @@ import (
 	"flag"
 	"log"
 
-	tgCl "github.com/RSheremeta/read-adviser-bot/clients/telegram"
+	client "github.com/RSheremeta/read-adviser-bot/clients/telegram"
 	"github.com/RSheremeta/read-adviser-bot/consumer/eventconsumer"
 	"github.com/RSheremeta/read-adviser-bot/events/telegram"
 
@@ -14,17 +14,20 @@ import (
 )
 
 const (
-	tokenFlagName  = "tg-bot-token"
-	tgBotHost      = "api.telegram.org"
+	tokenFlagName = "tg-bot-token"
+	tgBotHost     = "api.telegram.org"
+	batchSize     = 100
+)
+
+const (
 	storagePath    = "files_storage"
 	storageSqlPath = "data/sqlite/storage.db"
-	batchSize      = 100
 )
 
 func main() {
 	token := mustToken()
 
-	tgClient := tgCl.New(tgBotHost, token)
+	tgClient := client.New(tgBotHost, token)
 
 	// an alternative option to use - a file storage via Gob - if use this, change storage variable passing into tg.new() func
 	// storage := files.New(storagePath)
@@ -32,16 +35,16 @@ func main() {
 	// sqlite storage
 	storage, err := sqlite.New(storageSqlPath)
 	if err != nil {
-		log.Fatal("cannot connect to storage: ", err)
+		log.Fatal("cannot connect to the storage: ", err)
 	}
 
 	if err = storage.Init(context.TODO()); err != nil {
-		log.Fatal("cannot init storage: ", err)
+		log.Fatal("cannot init the storage: ", err)
 	}
 
 	eventsProcessor := telegram.New(tgClient, storage)
 
-	log.Println("service started")
+	log.Println("service is started")
 
 	consumer := eventconsumer.New(eventsProcessor, eventsProcessor, batchSize)
 

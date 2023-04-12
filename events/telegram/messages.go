@@ -12,7 +12,7 @@ const msgHello = `Hi there! 👋
 I'm Your Read Adviser Bot. 
 I'm intended to help you with storing and passing back the important links you always store somewhere and even forget about 😄
 
-Feel free to get more by doing a "/help" command.
+Feel free to get more using a "/help" command.
 
 Cheers! 🫡
 `
