@@ -22,3 +22,7 @@ If you make the Bot to pick any link for you, this link will be removed from the
 - just ```make start```  (uses **sqlite** by default)
 
 Hint: the `make` commands do build the binary and run the service whenever you invoke any of it, but you can also use a pre-built one [here](https://github.com/RSheremeta/read-adviser-bot/tags)
+
+### Demo
+
+![](https://github.com/RSheremeta/read-adviser-bot/blob/master/demo.gif)
